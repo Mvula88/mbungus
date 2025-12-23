@@ -75,104 +75,95 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// ===== Form Handling with EmailJS =====
-// Note: Replace with actual EmailJS credentials or Formspree endpoint
+// ===== Form Handling - Send to WhatsApp =====
+const whatsappNumber = '264813970000'; // Mbungus WhatsApp number
 
-// Contact Form
+// Contact Form - Send to WhatsApp
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
-    contactForm.addEventListener('submit', async function(e) {
+    contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const submitBtn = this.querySelector('button[type="submit"]');
+        // Get form values
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value || 'General Inquiry';
+        const message = document.getElementById('message').value;
+
+        // Format WhatsApp message
+        const whatsappMessage = `*New Website Inquiry*
+
+*Name:* ${name}
+*Phone:* ${phone}
+*Email:* ${email}
+*Subject:* ${subject}
+
+*Message:*
+${message}`;
+
+        // Encode and open WhatsApp
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+
+        // Show success message
         const messageDiv = document.getElementById('contact-message');
+        messageDiv.className = 'form-message success';
+        messageDiv.textContent = 'WhatsApp opened! Please tap Send to complete your inquiry.';
 
-        // Add loading state
-        submitBtn.classList.add('loading');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
-
-        // Collect form data
-        const formData = new FormData(this);
-
-        try {
-            // Using Formspree (replace YOUR_FORM_ID with actual ID)
-            const response = await fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                messageDiv.className = 'form-message success';
-                messageDiv.textContent = 'Thank you! Your message has been sent successfully. We will get back to you soon.';
-                this.reset();
-            } else {
-                throw new Error('Form submission failed');
-            }
-        } catch (error) {
-            messageDiv.className = 'form-message error';
-            messageDiv.textContent = 'Sorry, there was an error sending your message. Please try again or contact us directly.';
-        }
-
-        // Reset button
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Send Message';
-
-        // Scroll to message
-        messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Reset form
+        this.reset();
     });
 }
 
-// Quote Form
+// Quote Form - Send to WhatsApp
 const quoteForm = document.getElementById('quote-form');
 if (quoteForm) {
-    quoteForm.addEventListener('submit', async function(e) {
+    quoteForm.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const submitBtn = this.querySelector('button[type="submit"]');
+        // Get form values
+        const name = document.getElementById('quote-name').value;
+        const phone = document.getElementById('quote-phone').value;
+        const email = document.getElementById('quote-email').value;
+        const vehicleType = document.getElementById('vehicle-type').value;
+        const vehicleMake = document.getElementById('vehicle-make').value || 'Not specified';
+        const serviceType = document.getElementById('service-type').value;
+        const details = document.getElementById('quote-details').value;
+        const preferredDate = document.getElementById('preferred-date').value || 'Flexible';
+        const urgency = document.getElementById('urgency').value;
+
+        // Format WhatsApp message
+        const whatsappMessage = `*Quote Request from Website*
+
+*Customer Details:*
+• Name: ${name}
+• Phone: ${phone}
+• Email: ${email}
+
+*Vehicle Information:*
+• Type: ${vehicleType}
+• Make/Model: ${vehicleMake}
+
+*Service Required:*
+• Service: ${serviceType}
+• Urgency: ${urgency}
+• Preferred Date: ${preferredDate}
+
+*Description:*
+${details}`;
+
+        // Encode and open WhatsApp
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+
+        // Show success message
         const messageDiv = document.getElementById('quote-message');
+        messageDiv.className = 'form-message success';
+        messageDiv.textContent = 'WhatsApp opened! Please tap Send to submit your quote request.';
 
-        // Add loading state
-        submitBtn.classList.add('loading');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
-
-        // Collect form data
-        const formData = new FormData(this);
-
-        try {
-            // Using Formspree (replace YOUR_FORM_ID with actual ID)
-            const response = await fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                messageDiv.className = 'form-message success';
-                messageDiv.textContent = 'Thank you! Your quote request has been submitted. We will review your request and contact you with an estimate within 24 hours.';
-                this.reset();
-            } else {
-                throw new Error('Form submission failed');
-            }
-        } catch (error) {
-            messageDiv.className = 'form-message error';
-            messageDiv.textContent = 'Sorry, there was an error submitting your request. Please try again or contact us directly at +264 81 397 0000.';
-        }
-
-        // Reset button
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Quote Request';
-
-        // Scroll to message
-        messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Reset form
+        this.reset();
     });
 }
 
